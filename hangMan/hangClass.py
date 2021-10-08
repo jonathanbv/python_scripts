@@ -126,10 +126,15 @@ class hangGui:
 
         self.root.bind("<Return>",self.linkedMan.usrSubmit)
 
-    def guessValidator():
-        pass
-
     def build(self):
+        def guessValidator(input):
+            if input.isalpha() and len(input) == 1:
+                return True
+            elif len(input) == 0: #allow deletion
+                return True
+            else:
+                return False
+        reg = self.root.register(guessValidator) #register callback function
 
         self.hiScoreBoard = ttk.Label(self.mainframe, text="High Score: " + str(self.linkedMan.highScore))
         self.hiScoreBoard.grid(column=0,row=0, sticky='W')
@@ -142,7 +147,7 @@ class hangGui:
         self.scoreBoard.grid(column=2,row=0)
 
         #create an area to display letters that have been guessed
-        self.guessesMade = ttk.Label(self.mainframe, text= "abcdefghijklmnopqrstuvwxyz",font=20, padding="0 10 0 10")
+        self.guessesMade = ttk.Label(self.mainframe, text= "abcdefghijklmnopqrstuvwxyz",font=20, padding="0 10 0 10") #hmm...
         self.guessesMade.grid(column=0,row=1, columnspan=3)
 
         #create an area to display number of guesses remaining
@@ -151,7 +156,7 @@ class hangGui:
 
         #create an input area for the user to submit guesses
         self.guessChar = StringVar()
-        self.user_guess = ttk.Entry(self.mainframe, width=10, textvariable = self.guessChar, validate="key",validatecommand=self.guessValidator)
+        self.user_guess = ttk.Entry(self.mainframe, width=10, textvariable = self.guessChar, validate="key",validatecommand=(reg,'%P'))
         self.user_guess.grid(column=1, row=2)
         self.user_guess.focus()
 
