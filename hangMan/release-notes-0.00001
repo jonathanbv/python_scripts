@@ -1,0 +1,5 @@
+#Possible improvements:
+-you could keep the gameWord as an array, and just use "".join when it needs to be a string? This could simplify the logic needed to check the user's guess
+-at some point...add the actual hangman imagery
+-improve data validation (only allow single char input, reject invalid input without deducting score)
+
