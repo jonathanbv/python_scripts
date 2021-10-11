@@ -99,7 +99,7 @@ def flat(in_list):
             for j in item: #Yes: Iterate my contents
                 outlist.append(j)
         except:         #No: Just append me to the list.
-            outlist.append(item) 
+            outlist.append(item)
     return outlist
 def largest_difference(int_list):
     min = max = None
@@ -111,4 +111,13 @@ def largest_difference(int_list):
     return max - min
 
 def div_3(input_int):
-    return input_int % 3 == 0:
+    return input_int % 3 == 0
+
+def palindrome(inString):
+    #list comprehension approach that I was really proud of
+    #rev = "".join([inString[i] for i in range(len(inString) - 1,-1,-1)])
+    #return inString == rev
+
+    #smarter approach using string slicing
+    return inString == inString[::-1]
+print(palindrome('tacocat'))
