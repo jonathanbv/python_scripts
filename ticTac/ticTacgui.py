@@ -25,11 +25,13 @@ class ticTacGui:
         #to pass index information to the logic portion of game
         self.gameBoxes = []
         for i in range(0,3):
-            self.gameBoxes.append([Canvas(self.mainframe, width=75, height=75, bg="white")
-            for j in range(0,3)])
+            #a list of tuples, where tuple[0] is index and tuple[1]
+            #is a list of three canvas objects
+            self.gameBoxes.append((i,[Canvas(self.mainframe, width=75, height=75, bg="white")
+            for j in range(0,3)]))
 
         #place the boxes
-        for rowDex, row in enumerate(self.gameBoxes):
+        for rowDex, row in self.gameBoxes:
             for colDex, box in enumerate(row):
                 box.grid(column=colDex, row=rowDex + 1, padx=5, pady=5)
                 box.bind("<Button-1>", self.fillBox)
@@ -43,7 +45,13 @@ class ticTacGui:
         parent = event.widget
         parent.create_line(0, 0, 75, 75, width=5)
         parent.create_line(75, 0, 0, 75, width=5)
-        print(self.gameBoxes[0].index(parent))
+        for dex, row in self.gameBoxes:
+            if parent in row:
+                targetRow = dex + 1
+                targetCol = row.index(parent)
+                break
+        guess = (targetRow, targetCol)
+        self.logic.validateGuess(guess)
 
     def reset(self, event):
         print("OMG! Someone called the reset method")
