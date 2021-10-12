@@ -11,25 +11,25 @@ class ticTacGui:
         self.mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
         self.root.columnconfigure(0, weight=1)
         self.root.rowconfigure(0, weight=1)
-        #self.mainframe.columnconfigure(1,pad=100)
+        self.mainframe.rowconfigure(4,pad=5)
+        self.mainframe.rowconfigure(0,pad=5)
         self.build()
 
     def build(self):
         #create instructions at top
-        self.instruction = ttk.Label(self.mainframe, text="Click a blank square to place an 'X'")
-        self.instruction.grid(column=1,row=0, sticky=(W,E))
+        self.instruction = ttk.Label(self.mainframe, text="Click an empty box to place an 'x'", anchor="center")
+        self.instruction.grid(column=0,row=0, columnspan=3, sticky=(W,E))
 
         #create 9 boxes for Xs and Os
-        gameBoxes = [
-        Canvas(self.mainframe, width=50, height=50, bg="white")
+        gameBoxes = [ #Note ... this is not an instance variable, it can only be referenced by this method
+        Canvas(self.mainframe, width=75, height=75, bg="white")
         for i in range(1,10)]
         #place the boxes
         bxCol = 0
         bxRow = 1
         for box in gameBoxes:
-            print(bxCol,bxRow)
-            box.grid(column=bxCol, row=bxRow)
-            box.bind("<Button-1>", self.fillBox("X"))
+            box.grid(column=bxCol, row=bxRow, padx=5, pady=5)
+            box.bind("<Button-1>", self.fillBox)
             if bxCol < 2:
                 bxCol += 1
             else:
@@ -38,12 +38,16 @@ class ticTacGui:
 
         #create a button to reset game
         self.gameButton = ttk.Button(self.mainframe, text="Reset",command=self.reset)
-        self.gameButton.grid(column=1,row=4, ipadx=2)
-        self.root.mainloop()
+        self.gameButton.grid(column=0,row=4,columnspan=3, sticky=(W,E), ipadx=2)
+        #self.root.mainloop()
 
-    def fillBox(self,char):
-        pass
-    def reset(self):
-        pass
+    def fillBox(self, event):
+        parent = event.widget
+        parent.create_line(0, 0, 75, 75, width=5)
+        parent.create_line(75, 0, 0, 75, width=5)
+        #fillBox receives an event, but how do I reference the Canvas object that
+        #created the event?
+    def reset(self, event):
+        print("OMG! Someone called the reset method")
 
-ticTacGui(None)
+x = ticTacGui(None)
