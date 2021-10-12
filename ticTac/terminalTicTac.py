@@ -1,5 +1,5 @@
 #a simple tictactoe game
-#sends information to ticTacgui
+#that draws a board on the terminal
 import random as rnd
 import ticTacgui as gui
 
@@ -14,21 +14,35 @@ class ticTacToe:
 
     #constructor
     def __init__(self):
-        self.board = [
+        self.board = [ #maybe need self.board
         [" "," "," "],
         [" "," "," "],
         [" "," "," "],
         ]
         self.running = True
-        self.interf = gui.ticTacGui(self)
+        gui.ticTacGui(self)
         self.mainloop()
 
-    def validateGuess(self, guess):
+    def printBoard(self):
+        pass
+    #     dex = 1
+    #     print()
+    #     for row in self.board:
+    #         print("{:}: {:^5}|{:^5}|{:^5}".format(dex,*row))
+    #         if dex == 3: #if we're printing row 3, skip the next step
+    #             continue
+    #         dex += 1
+    #         print(" "*3 + "-"*17)
+    #     print(" " * 20)
+    #     print("   {:^5} {:^5} {:^5}".format("A","B","C"))
+
+    def getUserInput(self):
         #return true or false depending on whether guess was valid?
         #either keep that in this function or make that part of the
         #main logic
         validGuess = False
         while validGuess == False:
+            userInput = input("Enter column and row (ex. 'C1'):")
             if (len(userInput) > 0
             and userInput[0] in ticTacToe.validCol
             and int(userInput[1]) in ticTacToe.validRow):
@@ -44,7 +58,7 @@ class ticTacToe:
                 print("Invalid input. Try again")
         self.checkBoard()
 
-    def receiveMove(self):
+    def botChoice(self):
         validGuess = False
         print("Beep boop...bot is making a decision.")
         while validGuess == False:
@@ -75,6 +89,7 @@ class ticTacToe:
         or self.board[0][2] == self.board[1][1] == self.board[2][0]):
             winner = self.board[1][1]
         #if no winner, check for draw, else return None
+        #print an appropriate message
         if winner == None:
             fullLines = 0
             for row in self.board:
@@ -83,14 +98,21 @@ class ticTacToe:
             if fullLines == 3:
                 winner = "D"
                 self.running = False
+                print("It's a draw.")
             else:
                 return None
         elif winner == "X":
+            print("Congratulations, player. You win")
             self.running = False
         elif winner == "O":
+            print("You lost to a really, really dumb robot.")
             self.running = False
 
     def mainloop(self):
-        pass
+        self.printBoard()
+        while self.running == True:
+            self.getUserInput()
+            if not self.running: break
+            self.botChoice()
 
 ticTacToe()
