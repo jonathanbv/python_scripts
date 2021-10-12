@@ -1,6 +1,7 @@
 #a simple tictactoe game
 #that draws a board on the terminal
 import random as rnd
+import ticTacgui as gui
 
 class ticTacToe:
     #class variables
@@ -19,19 +20,21 @@ class ticTacToe:
         [" "," "," "],
         ]
         self.running = True
+        gui.ticTacGui(self)
         self.mainloop()
 
     def printBoard(self):
-        dex = 1
-        print()
-        for row in self.board:
-            print("{:}: {:^5}|{:^5}|{:^5}".format(dex,*row))
-            if dex == 3: #if we're printing row 3, skip the next step
-                continue
-            dex += 1
-            print(" "*3 + "-"*17)
-        print(" " * 20)
-        print("   {:^5} {:^5} {:^5}".format("A","B","C"))
+        pass
+    #     dex = 1
+    #     print()
+    #     for row in self.board:
+    #         print("{:}: {:^5}|{:^5}|{:^5}".format(dex,*row))
+    #         if dex == 3: #if we're printing row 3, skip the next step
+    #             continue
+    #         dex += 1
+    #         print(" "*3 + "-"*17)
+    #     print(" " * 20)
+    #     print("   {:^5} {:^5} {:^5}".format("A","B","C"))
 
     def getUserInput(self):
         #return true or false depending on whether guess was valid?
