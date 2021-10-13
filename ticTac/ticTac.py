@@ -20,7 +20,6 @@ class ticTacToe:
         if self.board[move[0]][move[1]] == " ":
             self.board[move[0]][move[1]] = "X"
             self.interf.drawPlayer(move)
-            print("In getplayermove, currents status of checkBoard is :",self.checkBoard())
             if self.checkBoard() == None:
                 self.botMove()
 
@@ -29,20 +28,13 @@ class ticTacToe:
         #then draw it
         validGuess = False
         while validGuess == False and not self.checkBoard():
-            time.sleep(0.25)
-            print("New while iteration")
             row = rnd.randint(0,2)
             col = rnd.randint(0,2)
-            print("Bot guess is: row:{} column{}".format(row,col))
+            time.sleep(1)
             if self.board[row][col] == " ":
                 validGuess = True
-                print("Bot made a valid guess. Printing...")
                 self.board[row][col] = "O"
                 self.interf.drawBot((row,col))
-            else:
-                print("Botguess was occupied, continuing.")
-                continue
-        print("Hello from outside the while loop.")
 
     def checkBoard(self):
         #check for gameOver condition
@@ -75,12 +67,21 @@ class ticTacToe:
             return None
         else:
             self.running = False
+            if winner == "X":
+                self.interf.instruction["text"] = "You won!"
+            elif winner == "O":
+                self.interf.instruction["text"] = "You lost to a really dumb robot."
+            elif winner == "D":
+                self.interf.instruction["text"] = "It's a draw. Wow."
             return(winner)
     def resetBoard(self):
+        clearRow = [" ", " ", " "]
+        self.interf.instruction["text"] = "Click an empty box to place an 'x'"
         for list in self.board:
-            list = [" "," "," "]
-        print(self.board)
+            list.clear()
+            for item in clearRow:
+                list.append(item)
         self.running = True
-        print(self.running)
 
 x = ticTacToe()
+x.interf.root.mainloop()
