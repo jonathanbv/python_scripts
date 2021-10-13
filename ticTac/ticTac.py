@@ -4,14 +4,6 @@ import random as rnd
 import ticTacgui as gui
 
 class ticTacToe:
-    #class variables
-    validCol = {
-    'a': 0, 'A': 0,
-    'b': 1, 'B': 1,
-    'c': 2, 'C': 2
-    }
-    validRow = [1,2,3]
-
     #constructor
     def __init__(self):
         self.board = [
@@ -21,44 +13,39 @@ class ticTacToe:
         ]
         self.running = True
         self.interf = gui.ticTacGui(self)
-        self.mainloop()
 
-    def validateGuess(self, guess):
-        #return true or false depending on whether guess was valid?
-        #either keep that in this function or make that part of the
-        #main logic
+    def getPlayerMove(self, move):
+        #guess is a tuple in the form (row, col)
+        if self.board[move[0]][move[1]] == " ":
+            self.board[move[0]][move[1]] = "X"
+            self.interf.drawPlayer(move)
+            print("In getplayermove, currents status of checkBoard is :",self.checkBoard())
+            if self.checkBoard() == None:
+                self.botMove()
+
+    def botMove(self):
+        #have the computer make a valid move
+        #then draw it
         validGuess = False
         while validGuess == False:
-            if (len(userInput) > 0
-            and userInput[0] in ticTacToe.validCol
-            and int(userInput[1]) in ticTacToe.validRow):
-                column = self.validCol[userInput[0]]
-                row = int(userInput[1]) - 1
-                if self.board[row][column] != " ":
-                    print("Space already full. Try again")
-                else:
-                    validGuess = True
-                    self.board[row][column] = "X"
-                    self.printBoard()
-            else:
-                print("Invalid input. Try again")
-        self.checkBoard()
-
-    def receiveMove(self):
-        validGuess = False
-        print("Beep boop...bot is making a decision.")
-        while validGuess == False:
-            col = rnd.randint(0,2)
             row = rnd.randint(0,2)
-            if self.board[row][col] != " ": #infinite loop possible
-                #add: check for gameover condition
-                continue
-            else:
+            col = rnd.randint(0,2)
+            print("Bot guess is: row:{} column{}".format(row,col))
+            if self.board[row][col] == " ":
                 validGuess = True
+                print("Bot made a valid guess. Printing...")
                 self.board[row][col] = "O"
-                self.printBoard()
-        self.checkBoard()
-    def checkBoard(self):    #check for gameOver condition
+                self.interf.drawBot((row,col))
+            elif self.checkBoard():
+                print("Victory condition detected. Ending bot loop.")
+                break
+            else:
+                print("Botguess was occupied, continuing.")
+                continue
+
+    def checkBoard(self):
+        #check for gameOver condition
+        #Return None, "X", "O", or "D"
         winner = None
         #is there a vertical win?
         for pair in enumerate(self.board[0]):
@@ -82,15 +69,9 @@ class ticTacToe:
                     fullLines += 1
             if fullLines == 3:
                 winner = "D"
-                self.running = False
-            else:
-                return None
-        elif winner == "X":
-            self.running = False
-        elif winner == "O":
-            self.running = False
 
-    def mainloop(self):
-        pass
+        if winner: self.running = False
 
-ticTacToe()
+        return(winner)
+
+x = ticTacToe()

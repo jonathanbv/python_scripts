@@ -34,24 +34,32 @@ class ticTacGui:
         for rowDex, row in self.gameBoxes:
             for colDex, box in enumerate(row):
                 box.grid(column=colDex, row=rowDex + 1, padx=5, pady=5)
-                box.bind("<Button-1>", self.fillBox)
+                box.bind("<Button-1>", self.passPlayerMove)
 
         #create a button to reset game
         self.gameButton = ttk.Button(self.mainframe, text="Reset",command=self.reset)
         self.gameButton.grid(column=0,row=4,columnspan=3, sticky=(W,E), ipadx=2)
-        self.root.mainloop()
+        #self.root.mainloop()
 
-    def fillBox(self, event):
+    def passPlayerMove(self, event):
         parent = event.widget
-        parent.create_line(0, 0, 75, 75, width=5)
-        parent.create_line(75, 0, 0, 75, width=5)
+        #find the indices of the box player clicked
         for dex, row in self.gameBoxes:
             if parent in row:
-                targetRow = dex + 1
+                targetRow = dex
                 targetCol = row.index(parent)
-                break
-        guess = (targetRow, targetCol)
-        self.logic.validateGuess(guess)
+                self.logic.getPlayerMove((targetRow, targetCol))
+
+        #if guess is valid, go ahead and draw the x
+        #otherwise do nothing
+    def drawPlayer(self,move):
+        box = self.gameBoxes[move[0]][1][move[1]]
+        box.create_line(0, 0, 75, 75, width=5)
+        box.create_line(75, 0, 0, 75, width=5)
+
+    def drawBot(self, move):
+        box = self.gameBoxes[move[0]][1][move[1]] #a very tortured, nonintuitive index
+        box.create_oval(0, 0, 75, 75, width=5)
 
     def reset(self, event):
         print("OMG! Someone called the reset method")
