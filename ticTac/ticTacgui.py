@@ -39,6 +39,7 @@ class ticTacGui:
         #create a button to reset game
         self.gameButton = ttk.Button(self.mainframe, text="Reset",command=self.reset)
         self.gameButton.grid(column=0,row=4,columnspan=3, sticky=(W,E), ipadx=2)
+
         #self.root.mainloop()
 
     def passPlayerMove(self, event):
@@ -54,14 +55,19 @@ class ticTacGui:
         #otherwise do nothing
     def drawPlayer(self,move):
         box = self.gameBoxes[move[0]][1][move[1]]
-        box.create_line(0, 0, 75, 75, width=5)
-        box.create_line(75, 0, 0, 75, width=5)
+        box.create_line(5, 5, 70, 70, width=5)
+        box.create_line(70, 5, 5, 70, width=5)
 
     def drawBot(self, move):
         box = self.gameBoxes[move[0]][1][move[1]] #a very tortured, nonintuitive index
-        box.create_oval(0, 0, 75, 75, width=5)
+        box.create_oval(5, 5, 70, 70, width=5)
 
-    def reset(self, event):
-        print("OMG! Someone called the reset method")
+    def reset(self):
+        self.logic.resetBoard()
+        for row in self.gameBoxes:
+            for box in row[1]:
+                for drawing in box.find_all():
+                    box.delete(drawing)
+
 
 #x = ticTacGui(None)

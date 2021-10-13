@@ -2,6 +2,7 @@
 #sends information to ticTacgui
 import random as rnd
 import ticTacgui as gui
+import time
 
 class ticTacToe:
     #constructor
@@ -27,7 +28,9 @@ class ticTacToe:
         #have the computer make a valid move
         #then draw it
         validGuess = False
-        while validGuess == False:
+        while validGuess == False and not self.checkBoard():
+            time.sleep(0.25)
+            print("New while iteration")
             row = rnd.randint(0,2)
             col = rnd.randint(0,2)
             print("Bot guess is: row:{} column{}".format(row,col))
@@ -36,12 +39,10 @@ class ticTacToe:
                 print("Bot made a valid guess. Printing...")
                 self.board[row][col] = "O"
                 self.interf.drawBot((row,col))
-            elif self.checkBoard():
-                print("Victory condition detected. Ending bot loop.")
-                break
             else:
                 print("Botguess was occupied, continuing.")
                 continue
+        print("Hello from outside the while loop.")
 
     def checkBoard(self):
         #check for gameOver condition
@@ -70,8 +71,16 @@ class ticTacToe:
             if fullLines == 3:
                 winner = "D"
 
-        if winner: self.running = False
-
-        return(winner)
+        if winner == " ":
+            return None
+        else:
+            self.running = False
+            return(winner)
+    def resetBoard(self):
+        for list in self.board:
+            list = [" "," "," "]
+        print(self.board)
+        self.running = True
+        print(self.running)
 
 x = ticTacToe()
