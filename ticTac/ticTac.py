@@ -17,24 +17,35 @@ class ticTacToe:
 
     def getPlayerMove(self, move):
         #guess is a tuple in the form (row, col)
-        if self.board[move[0]][move[1]] == " ":
-            self.board[move[0]][move[1]] = "X"
-            self.interf.drawPlayer(move)
-            if self.checkBoard() == None:
-                self.botMove()
+        if self.checkBoard() == None:
+            if self.board[move[0]][move[1]] == " ":
+                self.board[move[0]][move[1]] = "X"
+                self.interf.drawPlayer(move)
+                if self.checkBoard() == None:
+                    self.botMove()
 
     def botMove(self):
+        #more efficient bot moves could come from iterating through board
+        #random causes computer to make a bunch of invalid guesses
         #have the computer make a valid move
         #then draw it
         validGuess = False
+        for dex, row in enumerate(self.board,0):
+            if "O" in row and "X" not in row:
+                col = row.index(" ") #will always fill the leftmost blank...
+                self.board[dex][col] = "O"
+                validGuess = True
+                self.interf.drawBot((dex,col))
         while validGuess == False and not self.checkBoard():
             row = rnd.randint(0,2)
             col = rnd.randint(0,2)
-            time.sleep(1)
             if self.board[row][col] == " ":
                 validGuess = True
                 self.board[row][col] = "O"
                 self.interf.drawBot((row,col))
+                self.checkBoard()
+
+        if validGuess: self.checkBoard()
 
     def checkBoard(self):
         #check for gameOver condition
