@@ -30,12 +30,22 @@ class ticTacToe:
         #have the computer make a valid move
         #then draw it
         validGuess = False
-        for dex, row in enumerate(self.board,0):
-            if "O" in row and "X" not in row:
-                col = row.index(" ") #will always fill the leftmost blank...
-                self.board[dex][col] = "O"
-                validGuess = True
-                self.interf.drawBot((dex,col))
+        for rowDex, row in enumerate(self.board,0):
+            if "O" in row:
+            #look for a chance at a horizontal win
+                if "X" not in row:
+                    col = row.index(" ") #will always fill the leftmost blank...
+                    self.board[rowDex][col] = "O"
+                    validGuess = True
+                    self.interf.drawBot((rowDex,col))
+                #else:
+                #    for colDex, space in enumerate(row,0):
+                #        if (space == "O"):
+
+
+        #look for a vertical win opportuniy
+
+        #when all else fails, just pick something random
         while validGuess == False and not self.checkBoard():
             row = rnd.randint(0,2)
             col = rnd.randint(0,2)
