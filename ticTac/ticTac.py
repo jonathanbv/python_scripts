@@ -31,29 +31,38 @@ class ticTacToe:
         #then draw it
         validGuess = False
         for rowDex, row in enumerate(self.board,0):
-            if "O" in row:
-            #look for a chance at a horizontal win
-                if "X" not in row:
-                    col = row.index(" ") #will always fill the leftmost blank...
-                    self.board[rowDex][col] = "O"
-                    validGuess = True
-                    self.interf.drawBot((rowDex,col))
-                #else:
-                #    for colDex, space in enumerate(row,0):
-                #        if (space == "O"):
-
-
-        #look for a vertical win opportuniy
-
+            print("in bot outer for loop")
+            if "O" in row and " " in row and "X" not in row: #go for a horizontal win
+                col = row.index(" ") #will always fill the leftmost blank...
+                self.board[rowDex][col] = "O"
+                validGuess = True
+                self.interf.drawBot((rowDex,col))
+                break
+            elif rowDex == 0: #check for good moves based on row 0 values
+                print("checking rowDex == 0...")
+                for colDex, space in enumerate(row,0):
+                    if (space == "O" and self.board[rowDex+1][colDex] == "O"
+                    or self.board[rowDex+1][colDex] == " " and self.board[rowDex+2][colDex] == "0"
+                    or self.board[rowDex+2][colDex] == " "):
+                        if self.board[rowDex+2][colDex] == " ":
+                            self.board[rowDex+2][colDex] = "O"
+                            validGuess = True
+                            self.interf.drawBot((rowDex+2, colDex))
+                            break
+                break
+            elif rowDex == 1:
+                pass
+            elif rowDex == 2:
+                pass
         #when all else fails, just pick something random
         while validGuess == False and not self.checkBoard():
+            print("in bot while loop")
             row = rnd.randint(0,2)
             col = rnd.randint(0,2)
             if self.board[row][col] == " ":
                 validGuess = True
                 self.board[row][col] = "O"
                 self.interf.drawBot((row,col))
-                self.checkBoard()
 
         if validGuess: self.checkBoard()
 
